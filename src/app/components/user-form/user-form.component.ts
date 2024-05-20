@@ -1,8 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { IUser } from '../../models/IUser';
 
 @Component({
   selector: 'app-user-form',
@@ -11,9 +12,11 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.css',
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent implements OnInit,OnChanges {
   userForm!: FormGroup;
   @Output() closeModal = new EventEmitter();
+  @Input () currentUser: IUser | null = null;
+  @Input() buttonTitle:string = ''
 
   constructor(
     private _fb: FormBuilder,
@@ -51,21 +54,45 @@ export class UserFormComponent implements OnInit {
     return null;
   }
 
+  ngOnChanges(): void {
+    if(this.currentUser){
+      this.userForm.patchValue({
+        name: this.currentUser.name,
+        email: this.currentUser.email,
+        address: this.currentUser.address,
+        mobile: this.currentUser.mobile,
+        gender: this.currentUser.gender
+      })
+    } else {
+      this.userForm.reset()
+    }
+  }
 
   addUser() {
     if(this.userForm.valid){
-      const userData = this.userForm.value
-      this._service.registerUser(userData).subscribe({
-        next :(res)=>{      
-          this.resetUserForm()
-          this._toastr.success("User Added")
-        },
-        error:(err)=>{
-          this._toastr.error(err.message)
-        }
-      })
-      
-      
+      if(this.currentUser){
+        const userData = this.userForm.value;
+        const userId = this.currentUser._id as string;
+        this._service.updateUser(userId,userData).subscribe({
+          next: (res)=>{
+            console.log(res,"updated");
+            this.resetUserForm();
+            this._toastr.success("Updated Successfully");
+          }
+        })
+      } else {
+        const userData = this.userForm.value
+        this._service.registerUser(userData).subscribe({
+          next :(res)=>{      
+            this.resetUserForm()
+            this._toastr.success("User Added")
+          },
+          error:(err)=>{
+            this._toastr.error(err.message)
+          }
+        })
+
+      }
     }
   }
 

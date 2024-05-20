@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { IUser } from '../../models/IUser';
 import { UserFormComponent } from '../user-form/user-form.component';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { ToastrService } from 'ngx-toastr';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -11,27 +12,42 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   isOpenModal: boolean = false;
+  currentUser: IUser | null = null
+  userList!: IUser[];
+  buttonTitle: string = ''
 
-  userList: IUser[] = [
-    { name: 'John Doe', email: 'john.doe@example.com', role: 'Admin' },
-    { name: 'Jane Smith', email: 'jane.smith@example.com', role: 'Editor' },
-    { name: 'Mike Jones', email: 'mike.jones@example.com', role: 'User' },
-  ];
+  constructor(private _toastr: ToastrService, private _service: UserService) {}
 
-  constructor(
-    private _toastr:ToastrService
-  ) {  }
+  ngOnInit(): void {
+    this.getAllUsersList();
+  }
 
+  getAllUsersList() {
+    this._service.getAllUsers().subscribe({
+      next: (res) => {
+        this.userList = res.data;
+      },
+      error: (err) => {
+        this._toastr.error('Some thing Went Wrong');
+      },
+    });
+  }
   openModal() {
+    this.currentUser = null
     this.isOpenModal = true;
+    this.buttonTitle = "Register"
   }
   closeModal() {
     this.isOpenModal = false;
+    this.getAllUsersList();
   }
 
-  onClick(){
-    this._toastr.success("clicked")
+  loadCurrentUser(user: IUser) {
+    this.currentUser = user;
+    this.buttonTitle ="Update"
+    this.isOpenModal = true;
+
   }
 }

@@ -1,7 +1,7 @@
 <div class="flex justify-between items-center mb-6">
-  <h4 class="font-bold text-2xl"></h4>
+  <h4 class="font-bold text-2xl">User Managment</h4>
   <button type="button" (click)="openModal()"
-    class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-full px-6 py-3 text-center mb-2 ">Add
+    class="text-white bg-emerald-500 hover:bg-emerald-800  focus:outline-none font-medium rounded-md px-6 py-3 text-center mb-2 mt-3 mr-3 ">Add
     User</button>
 </div>
 
@@ -12,26 +12,37 @@
         <tr class="border-gray-400 bg-gray-200 font-sans text-sm font-normal text-black">
           <th class="px-4 py-2">Name</th>
           <th class="px-4 py-2">Email</th>
-          <th class="px-4 py-2">Role</th>
+          <th class="px-4 py-2">Address</th>
+          <th class="px-4 py-2">Mobile</th>
+          <th class="px-4 py-2">Gender</th>
           <th class="px-4 py-2">Action</th>
         </tr>
       </thead>
       <tbody>
-        @for(user of userList; track user._id){
-        <tr class="font-sans text-sm text-black">
-          <td class="px-4 py-2 ">{{user.name}}</td>
-          <td class="px-4 py-2 ">{{user.email}}</td>
-          <td class="px-4 py-2 ">{{user.role}}</td>
-          <Button class="mt-2 h-8 w-24 rounded-lg text-white font-semibold text-xs transition duration-30">Edit</Button>
-        </tr>
-      }
+        @if(userList){
+
+          @for(user of userList; track user._id){
+            <tr class="font-sans text-sm text-black">
+              <td class="px-4 py-2 ">{{user?.name}}</td>
+              <td class="px-4 py-2 ">{{user?.email}}</td>
+              <td class="px-4 py-2 ">{{user.address}}</td>
+              <td class="px-4 py-2 ">{{user.mobile}}</td>
+              <td class="px-4 py-2 ">{{user.gender}}</td>
+              <button (click)="loadCurrentUser(user)" class="mt-2 h-8 w-24 rounded-lg border border-emerald-400 text-emerald-500 font-semibold text-md-center hover:bg-emerald-400 hover:text-white transition duration-500">Edit</button>
+            </tr>
+          } @empty {
+            <tr class="text-center" >User list is empty</tr>
+          }
+        }
       </tbody>
     </table>
   </div>
 
 </div>
-<button (click)="onClick()">Click</button>
-
 <app-modal [isOpen]="isOpenModal" (closeModel)="closeModal()">
-  <app-user-form (closeModal)="isOpenModal = false"></app-user-form>
+  <app-user-form 
+  [buttonTitle]="buttonTitle" 
+  [currentUser]="currentUser" 
+  (closeModal)="closeModal()">
+  </app-user-form>
 </app-modal>

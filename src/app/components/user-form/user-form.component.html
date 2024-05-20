@@ -45,7 +45,6 @@
     @if (userForm.get('gender')?.errors?.['required'] && userForm.get('gender')?.touched) {
     <div class="form-error">Select Any gender</div>
     }
-    <button class="bg-[#49BBBD] py-2 w-fit px-8 mx-auto rounded-2xl hover:scale-105 duration-300">Register</button>
-    
+    <button class="bg-emerald-400 py-2 w-fit px-8 mx-auto rounded-md hover:scale-105 hover:text-white duration-300">{{buttonTitle}}</button> 
   </form>
 </div>
