@@ -1,0 +1,51 @@
+<div class="items-center relative">
+  <div class="absolute top-[-20px] right-[-20px]">
+    <svg (click)="modalClose()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+      stroke="currentColor" class="w-8 h-8 absolute top-2 right-2 text-slate-800 hover:bg-gray-200">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  </div>
+  <form action="" class="flex flex-col px-8 pt-5 gap-4" [formGroup]="userForm" (ngSubmit)="addUser()">
+    <input class="p-2 rounded-md border border-[#49BBBD]" type="text" placeholder="Name" formControlName="name"/>
+      @if (userForm.get('name')?.errors?.['required'] && userForm.get('name')?.touched) {
+      <div class="form-error">Name is required</div>
+      }
+
+      @if (userForm.get('name')?.errors?.['isEmptySpace']) {
+      <div class="form-error">Only whitespace not allowed! Enter a valid Name</div>
+      }
+    <input class="p-2 rounded-md border border-[#49BBBD]" type="email" placeholder="Email" formControlName="email">
+      @if (userForm.get('email')?.errors?.['required'] && userForm.get('email')?.touched) {
+      <div class="form-error">Email is required</div>
+      }
+      @if (userForm.get('email')?.errors?.['email'] && userForm.get('email')?.touched) {
+      <div class="form-error">Inavlid email</div>
+      }
+    <input class="p-2 rounded-md border border-[#49BBBD]" type="text" placeholder="Address" formControlName="address"/>
+      @if (userForm.get('address')?.errors?.['required'] && userForm.get('address')?.touched) {
+      <div class="form-error">Address is required</div>
+      }
+      @if (userForm.get('address')?.errors?.['isEmptySpace'] && userForm.get('email')?.touched) {
+      <div class="form-error">Only whitespace not allowed! Enter a valid Address</div>
+      }
+    <input class="p-2 rounded-md border border-[#49BBBD]" type="text" placeholder="Mobile Number" formControlName="mobile"/>
+      @if (userForm.get('mobile')?.errors?.['required'] && userForm.get('mobile')?.touched) {
+      <div class="form-error">Mobile Number is required</div>
+      }
+      @if (userForm.get('mobile')?.errors?.['invalidMobile'] && userForm.get('mobile')?.touched) {
+      <div class="form-error">Invalid mobile number! Should be 10 Numbers</div>
+      }
+
+    <select class="p-2 rounded-md border border-[#49BBBD]" formControlName="gender">
+      <option selected disabled>Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+    @if (userForm.get('gender')?.errors?.['required'] && userForm.get('gender')?.touched) {
+    <div class="form-error">Select Any gender</div>
+    }
+    <button class="bg-[#49BBBD] py-2 w-fit px-8 mx-auto rounded-2xl hover:scale-105 duration-300">Register</button>
+    
+  </form>
+</div>

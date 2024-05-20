@@ -1,1 +1,37 @@
-<p>home works!</p>
+<div class="flex justify-between items-center mb-6">
+  <h4 class="font-bold text-2xl"></h4>
+  <button type="button" (click)="openModal()"
+    class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-full px-6 py-3 text-center mb-2 ">Add
+    User</button>
+</div>
+
+<div class="flex flex-col items-center justify-between h-96 mb-4 rounded-lg mt-3 bg-white ">
+  <div class="w-full overflow-x-auto rounded-lg ">
+    <table class="min-w-full border-none text-left">
+      <thead>
+        <tr class="border-gray-400 bg-gray-200 font-sans text-sm font-normal text-black">
+          <th class="px-4 py-2">Name</th>
+          <th class="px-4 py-2">Email</th>
+          <th class="px-4 py-2">Role</th>
+          <th class="px-4 py-2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(user of userList; track user._id){
+        <tr class="font-sans text-sm text-black">
+          <td class="px-4 py-2 ">{{user.name}}</td>
+          <td class="px-4 py-2 ">{{user.email}}</td>
+          <td class="px-4 py-2 ">{{user.role}}</td>
+          <Button class="mt-2 h-8 w-24 rounded-lg text-white font-semibold text-xs transition duration-30">Edit</Button>
+        </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+
+</div>
+<button (click)="onClick()">Click</button>
+
+<app-modal [isOpen]="isOpenModal" (closeModel)="closeModal()">
+  <app-user-form (closeModal)="isOpenModal = false"></app-user-form>
+</app-modal>
